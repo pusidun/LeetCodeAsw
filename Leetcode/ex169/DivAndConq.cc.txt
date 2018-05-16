@@ -1,0 +1,38 @@
+class Solution {
+public:
+	/* count elem in nums[lo...hi] */
+    int countElem(vector<int>& nums, int elem, int lo, int hi){
+        int cnt=0;
+        for(int i=lo; i<=hi; i++)
+            if(nums[i]==elem)
+                cnt++;
+        return cnt;
+    }
+    
+	/*
+	** params: nums:arr,lo,hi
+	** return: major element in nums which index between lo and hi
+	*/
+    int majorElem(vector<int>& nums, int lo, int hi){
+        if(lo>=hi){
+            return nums[lo];
+        }
+        
+        int mid = lo + (hi-lo)/2;
+        int leftElem = majorElem(nums, lo, mid);
+        int rightElem = majorElem(nums, mid+1, hi);
+        if(leftElem == rightElem)
+            return leftElem;
+        
+        int leftNum = countElem(nums, leftElem, lo, mid);
+        int rightNum = countElem(nums, rightElem, mid+1, hi);
+        if(leftNum>rightNum)
+            return leftElem;
+        else
+            return rightElem;
+    }
+    
+    int majorityElement(vector<int>& nums) {
+        return majorElem(nums, 0, nums.size()-1);
+    }
+};

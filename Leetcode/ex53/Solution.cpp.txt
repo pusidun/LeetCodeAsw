@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums, int lo, int hi){
+        if(lo>=hi)
+            return nums[lo];
+        
+        int mid = lo + (hi-lo)/2;
+        int leftSum = maxSubArray(nums, lo, mid);
+        int rightSum = maxSubArray(nums, mid+1, hi);
+        
+        int midSum=0, midMax=0;
+        int i, tmp;
+        for(i=mid,tmp=0; i>=lo; i--){
+            tmp += nums[i];
+            if(tmp>midMax)
+                midMax=tmp;
+        }
+        midSum += midMax;
+        midMax = 0;
+        for(i=mid+1,tmp=0; i<=hi; i++){
+            tmp += nums[i];
+            if(tmp>midMax)
+                midMax=tmp;
+        }
+        midSum += midMax;
+        if(midSum == 0)
+            midSum = (nums[mid]>nums[mid+1])?nums[mid]:nums[mid+1];
+        
+        return (leftSum>rightSum)?(midSum>leftSum?midSum:leftSum):(midSum>rightSum?midSum:rightSum);
+    }
+    
+    int maxSubArray(vector<int>& nums) {
+        return maxSubArray(nums, 0, nums.size()-1);
+    }
+};
