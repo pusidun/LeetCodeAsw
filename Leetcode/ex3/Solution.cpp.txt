@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int hash_tbl[257];
+        int ans=0;
+        for(int i=0; i<s.size(); i++){
+            memset(hash_tbl, 0, sizeof(hash_tbl));
+            int tmp=0;
+            for(int j=i; j<s.size();j++){
+                char c=s[j];
+                if(hash_tbl[c]!=0){
+                    ans=max(ans, j-i);
+                    break;
+                }
+                else{
+                    hash_tbl[c]++;
+                    tmp++;
+                }
+            }
+            ans=max(ans,tmp);
+        }
+        return ans;
+    }
+};
