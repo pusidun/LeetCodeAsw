@@ -65,7 +65,42 @@ Singletion* Singletion::getInstance()
 2. c++11解决
 见参考
 
+3. pthread_once
+陈硕《Linux多线程服务端编程》书上提供的方法
+```
+template<typename T>
+class Singleton:nocopyable
+{
+public:
+	static T& instance()
+	{
+		pthread_once(&ponce_, &Singleton::init);
+		return *value_;
+	}
+
+private:
+	Singleton();
+	~Singleton();
+
+	static void init()
+	{
+		value_ = new T();
+	}
+
+private:
+	static pthread_once_t ponce_;
+	static T* value_;
+};
+
+template<typename T>
+pthread_once_t Singleton<T>::ponce_ = PTHREAD_ONCE_INIT;
+
+template<typename T>
+T* Singleton<T>::value_=NULL;
+```
+
 参考：
 https://thorns.cn/2019/03/09/DCLP.html
 https://www.oschina.net/translate/double-checked-locking-is-fixed-in-cpp11?cmp&p=1
 https://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/
+https://github.com/chenshuo/muduo
